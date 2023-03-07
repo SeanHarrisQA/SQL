@@ -1,0 +1,15 @@
+USE sakila;
+
+SELECT * FROM `actor`;
+SELECT * FROM `actor` WHERE `first_name` = 'john';
+SELECT * FROM `actor` ORDER BY `first_name` ASC;
+SELECT * FROM `actor` WHERE `last_name` = 'neeson';
+SELECT * FROM `actor` WHERE `actor_id` % 10 = 0;
+SELECT `description` FROM `film` WHERE `film_id` = 100;
+SELECT `title`,`rating` FROM `film` WHERE `rating` = 'R';
+SELECT `title`,`rating` FROM `film` WHERE `rating` != 'R';
+SELECT `title` FROM `film` ORDER BY `length` ASC, `title` LIMIT 10;
+SELECT DISTINCT `country` FROM `country`;
+SELECT DISTINCT `length` FROM `film`;
+SELECT `name` FROM `language` ORDER BY `name` ASC;
+SELECT * FROM `language`;
