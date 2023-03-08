@@ -69,3 +69,19 @@ GROUP BY
   `last_name` 
 HAVING 
   occurences_of_surname = 1;
+  
+  
+-- SECTION 3
+  
+  
+-- 3.1 What is the average running time of films by category?
+SELECT 
+    `c`.`name`, AVG(`f`.`length`) AS `average_length`
+FROM
+    `film` AS `f`
+        JOIN
+    `film_category` AS `fc` ON `f`.`film_id` = `fc`.`film_id`
+        JOIN
+	`category` AS `c` ON `fc`.`category_id` = `c`.`category_id`
+GROUP BY `c`.`name`
+ORDER BY `average_length` DESC;
