@@ -135,5 +135,13 @@ GROUP BY `a`.`actor_id`;
 
 -- 3.7 Is ‘Academy Dinosaur’ available for rent from Store 1?
 SELECT 
+	COUNT(*) AS `copies_available`
+FROM
+	`film` AS `f`
+		JOIN
+	`inventory` AS `i` ON `f`.`film_id` = `i`.`film_id`
+		JOIN
+	`rental` AS `r` ON `i`.`inventory_id` = `r`.`inventory_id`
+WHERE `f`.`title` = 'academy dinosaur' AND `i`.`store_id` = 1 AND `r`.`return_date` IS NOT NULL;
 
 -- 3.8 When is ‘Academy Dinosaur’ due?
