@@ -4,6 +4,7 @@ USE sakila;
 SELECT * FROM `actor`;
 -- 1.2
 SELECT * FROM `actor` WHERE `first_name` = 'john';
+SELECT * FROM `actor` ORDER BY `first_name` ASC;
 -- 1.3
 SELECT * FROM `actor` WHERE `last_name` = 'neeson';
 -- 1.4
@@ -24,16 +25,28 @@ SELECT DISTINCT `country` FROM `country`;
 SELECT DISTINCT `length` FROM `film`;
 -- 1.12
 SELECT `name` FROM `language` ORDER BY `name` ASC;
+SELECT * FROM `language`;
 
 -- 2.1 Which actor has appeared in the most films?
-SELECT `actor_id`, COUNT(`actor_id`) AS number_of_films FROM `film_actor` GROUP BY `actor_id` ORDER BY number_of_films DESC;
+SELECT `actor_id`, COUNT(`actor_id`) AS number_of_films FROM `film_actor` 
+  GROUP BY `actor_id` 
+  ORDER BY number_of_films DESC;
 SELECT CONCAT(`first_name`, ' ', `last_name`) AS full_name FROM `actor` WHERE `actor_id` = 107;
+-- OR
+SELECT CONCAT(`first_name`, ' ', `last_name`) AS full_name FROM `actor` 
+  WHERE `actor_id` = (
+  SELECT `actor_id` FROM `film_actor` 
+  GROUP BY `actor_id` 
+  ORDER BY COUNT(`actor_id`) DESC LIMIT 1
+);
 
 -- 2.2 What is the average running time of all the films in the database?
-SELECT AVG(`length`) FROM `film`;
+SELECT AVG(`length`) AS average_film_runtime FROM `film`;
 
 -- 2.3 What is the average running time of films by category?
-SELECT `category`, AVG(`length`) AS duration FROM `film_list` GROUP BY `category` ORDER BY `category` ASC;
+SELECT `category`, AVG(`length`) AS mean_duration FROM `film_list` 
+  GROUP BY `category` 
+  ORDER BY `category` ASC;
 
 -- 2.4 How many films have robots in them?
 SELECT COUNT(*) AS films_containing_robots FROM `film` WHERE `description` LIKE '%robot%';
@@ -41,7 +54,8 @@ SELECT COUNT(*) AS films_containing_robots FROM `film` WHERE `description` LIKE 
 -- 2.5 Find the films with the longest runtimes (TOP 10) ***
 SELECT `title`, `length` FROM `film` ORDER BY `length` DESC, `title` LIMIT 10;
 -- Or
-SELECT `title`, `length` FROM `film` WHERE `length` = ( SELECT MAX(`length`) FROM `film`) ORDER BY `title` ASC;
+SELECT `title`, `length` FROM `film` 
+  WHERE `length` = ( SELECT MAX(`length`) FROM `film`);
 
 -- 2.6 Count how many films were released in 2010
 SELECT COUNT(`title`) AS films_released_in_2010 FROM `film` WHERE `release_year` = 2010;
@@ -54,6 +68,4 @@ FROM
 GROUP BY 
   `last_name` 
 HAVING 
-  occurences_of_surname = 1 
-ORDER BY occurences_of_surname ASC;
-
+  occurences_of_surname = 1;
