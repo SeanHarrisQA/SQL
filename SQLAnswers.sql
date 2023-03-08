@@ -73,7 +73,8 @@ HAVING
   
 -- SECTION 3
   
-  
+ USE sakila;
+
 -- 3.1 What is the average running time of films by category?
 SELECT 
     `c`.`name`, AVG(`f`.`length`) AS `average_length`
@@ -82,6 +83,57 @@ FROM
         JOIN
     `film_category` AS `fc` ON `f`.`film_id` = `fc`.`film_id`
         JOIN
-	`category` AS `c` ON `fc`.`category_id` = `c`.`category_id`
+    `category` AS `c` ON `fc`.`category_id` = `c`.`category_id`
 GROUP BY `c`.`name`
 ORDER BY `average_length` DESC;
+
+-- 3.2 Which last names appear more than once?
+
+-- 3.3 Retrieve all movies that Fred Costner has appeared in. 
+SELECT
+    `f`.`title`
+FROM
+    `film` AS `f`
+        JOIN
+	`film_actor` AS `fa` ON `f`.`film_id` = `fa`.`film_id`
+        JOIN
+	`actor` AS `a` ON `fa`.`actor_id` = `a`.`actor_id`
+WHERE `a`.`first_name` = 'fred' AND `a`.`last_name` = 'costner';
+
+-- 3.4 Find out which location has the most copies of BUCKET BROTHERHOOD.
+-- *** Incomplete ***
+SELECT 
+    `store_id`, COUNT(`store_id`)
+FROM
+    `inventory`
+WHERE
+    `film_id` = (SELECT 
+            `film_id`
+        FROM
+            `film`
+        WHERE
+            `title` = 'bucket brotherhood')
+GROUP BY `store_id`;
+
+-- 3.5 Create a list of categories and the number of films for each category.
+SELECT 
+    `c`.`name`, COUNT(`fc`.`film_id`) AS `number_of_films`
+FROM 
+    `category` AS `c`
+        JOIN
+    `film_category` AS `fc` ON `c`.`category_id` = `fc`.`category_id`
+GROUP BY `c`.`name`;
+
+-- 3.6 Create a list of actors and the number of movies by each actor.
+SELECT
+    CONCAT(`a`.`first_name`, ' ', `a`.`last_name`) AS `full_name`, COUNT(`fa`.`film_id`) AS `number_of_films`
+FROM
+	`actor` AS `a`
+		JOIN
+	`film_actor` AS `fa` ON `a`.`actor_id` = `fa`.`actor_id`
+GROUP BY `a`.`actor_id`;
+
+-- 3.7 Is ‘Academy Dinosaur’ available for rent from Store 1?
+SELECT 
+
+-- 3.8 When is ‘Academy Dinosaur’ due?
